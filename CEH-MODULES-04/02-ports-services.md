@@ -1,7 +1,6 @@
-# 02 — Ports & Services à Énumérer
+# 🔌 02 — Services et Ports à Énumérer
 
-> **CEH v13 · Module 04**  
-> [← Retour au README](./README.md)
+> **CEH v13 | Module 4** | [← Retour au sommaire](./README.md)
 
 ---
 
@@ -10,183 +9,179 @@
 | Critère | TCP | UDP |
 |---------|-----|-----|
 | **Type** | Orienté connexion | Sans connexion |
-| **Fiabilité** | ✅ Accusés de réception | ❌ Pas de garantie |
-| **Retransmission** | ✅ Automatique | ❌ Non |
-| **Contrôle flux** | ✅ Oui | ❌ Non |
-| **Utilisation** | HTTP, FTP, SSH, SMTP | DNS, SNMP, streaming |
+| **Fiabilité** | ✅ Fiable (ACK, retransmission) | ❌ Non garanti |
+| **Vitesse** | Plus lent | Plus rapide |
+| **Usage** | Email, web, transferts fichiers | Streaming, VoIP, DNS |
+| **Contrôle flux** | ✅ Oui (fenêtre glissante) | ❌ Non |
 
 ---
 
-## 🗂️ Tableau des Ports d'Énumération
-
-| Port | Proto | Service | Risques & Exploitation |
-|------|-------|---------|------------------------|
-| **53** | TCP/UDP | DNS Zone Transfer | Transfert de zone → liste complète des hôtes DNS |
-| **135** | TCP/UDP | MS RPC Endpoint Mapper | DoS possible, énumération des services RPC |
-| **137** | UDP | NetBIOS Name Service (NBNS/WINS) | Résolution noms NetBIOS, first target |
-| **139** | TCP | NetBIOS Session Service (SMB) | Sessions nulles, partage fichiers/imprimantes |
-| **161** | UDP | SNMP | Lecture config réseau via community strings |
-| **162** | UDP | SNMP Trap | Réception alertes SNMP |
-| **389** | TCP/UDP | LDAP | Accès annuaire, extraction users/groupes |
-| **445** | TCP/UDP | SMB over TCP (Direct Host) | Partage fichiers Windows moderne |
-| **2049** | TCP | NFS | Montage systèmes de fichiers distants |
-| **25** | TCP | SMTP | Énumération comptes email (VRFY, EXPN) |
-| **110** | TCP | POP3 | Accès boîtes mail |
-| **143** | TCP | IMAP | Accès boîtes mail avancé |
-| **3268** | TCP | LDAP Global Catalog | Requêtes AD globales |
-| **3269** | TCP | LDAP GC over SSL | Requêtes AD globales sécurisées |
-| **88** | TCP/UDP | Kerberos | Authentification AD, AS-REP roasting |
-| **636** | TCP | LDAPS | LDAP sécurisé (SSL) |
-| **5900** | TCP | VNC | Accès bureau distant |
-
----
-
-## 🔎 Détail des Services Critiques
-
-### 🔵 Port 53 — DNS (Zone Transfer)
-```
-UDP 53  → Requêtes DNS standard (< 512 octets)
-TCP 53  → Requêtes DNS longues / Zone Transfer
-```
-
-**Fonctionnement du Zone Transfer :**
-```
-Client              Serveur DNS
-  |                     |
-  |-- axfr request ---→ |
-  |                     |
-  |← tous les records --|
-  (noms, IPs, sous-domaines...)
-```
-
-Malwares connus utilisant le port 53 : **ADM worm**, **Bonk Trojan**
-
----
-
-### 🔵 Port 135 — RPC Endpoint Mapper
-```
-Client RPC  →  demande quel port pour service X
-                         ↓
-           RPC Endpoint Mapper (port 135)
-                         ↓
-           Répond avec le numéro de port
-```
-> ⚠️ Faille dans le traitement des messages TCP/IP → possible attaque **DoS**
-
----
-
-### 🔵 Port 137 — NetBIOS Name Service
-```
-NetBIOS Name : 16 caractères
-  ├── 15 premiers : nom de la machine
-  └── 16ème       : type de service (code hexa)
-```
-
-| Code | Type de service |
-|------|----------------|
-| `00` | Workstation Service |
-| `03` | Messenger Service |
-| `06` | RAS Server |
-| `20` | File Server Service |
-| `1B` | Domain Master Browser |
-| `1D` | Master Browser |
-
----
-
-### 🔵 Port 139 — NetBIOS Session (SMB over NetBIOS)
-- Transfert de fichiers via réseau
-- Établissement de **sessions nulles**
-- Partage imprimantes
-
-> ⚠️ Port 139 mal configuré = accès non autorisé au système de fichiers complet
-
----
-
-### 🔵 Port 445 — SMB Direct
-- Version moderne de SMB (sans NetBIOS)
-- Windows Vista+ utilise directement le port 445
-- Compatible TCP et UDP
+## 🗺️ Carte des ports clés
 
 ```
-SMB over NetBIOS  →  Port 139 (ancien)
-SMB over TCP      →  Port 445 (moderne)
+PORT    PROTO     SERVICE                   RISQUE
+─────────────────────────────────────────────────────────
+20/21   TCP       FTP (données/contrôle)    🟡 Moyen
+22      TCP       SSH / SFTP               🟡 Brute-force
+23      TCP       Telnet                   🔴 CRITIQUE (clair)
+25      TCP       SMTP                     🟡 User enum
+53      TCP/UDP   DNS                      🔴 Zone Transfer
+69      UDP       TFTP                     🔴 Malware upload
+111     TCP/UDP   RPC Portmapper           🟡 Moyen
+123     UDP       NTP                      🟡 Info leak
+135     TCP/UDP   RPC Endpoint Mapper      🔴 DoS possible
+137     UDP       NetBIOS Name Service     🟡 Moyen
+138     UDP       NetBIOS Datagram         🟡 Moyen
+139     TCP       NetBIOS Session / SMB    🔴 CRITIQUE
+161     UDP       SNMP                     🔴 Config leak
+162     TCP/UDP   SNMP Trap                🟡 Moyen
+179     TCP       BGP                      🔴 Hijacking
+389     TCP/UDP   LDAP                     🔴 AD enum
+445     TCP/UDP   SMB Direct               🔴 CRITIQUE
+500     UDP       IKE / ISAKMP             🟡 VPN enum
+2049    TCP       NFS                      🔴 File access
+3268    TCP/UDP   Global Catalog (LDAP)    🟡 AD enum
+5060    TCP/UDP   SIP (VoIP)               🟡 VoIP enum
+5061    TCP/UDP   SIP over TLS             🟡 VoIP enum
 ```
 
 ---
 
-### 🔵 Port 161/162 — SNMP
-```
-Manager                    Agent
-   |                         |
-   |-- GET Request (161) --> |
-   |                         |
-   |<-- Response (161) ------|
-   
-   Agent --> TRAP (162) --> Manager
-```
+## 📋 Détail des ports critiques
 
-**Community Strings par défaut :**
-| String | Accès |
-|--------|-------|
-| `public` | Read-Only (RO) |
-| `private` | Read-Write (RW) |
+### 🔵 TCP/UDP 53 — DNS Zone Transfer
+Le DNS utilise **UDP 53** par défaut. Si la réponse dépasse 512 octets, bascule sur **TCP 53**.
 
----
-
-### 🔵 Port 389 — LDAP
-- Protocole d'accès aux annuaires distribués
-- Active Directory utilise LDAP comme protocole principal
-- Permet d'extraire : utilisateurs, groupes, OUs, politiques
-
----
-
-### 🔵 Port 2049 — NFS
-> ⚠️ NFS mal configuré permet :
-> - Contrôle du système distant
-> - Élévation de privilèges
-> - Injection de backdoors/malwares
-
----
-
-### 🔵 Port 25 — SMTP
-**Commandes SMTP pour l'énumération :**
-
-| Commande | Syntaxe | Description |
-|----------|---------|-------------|
-| `HELO` | `HELO domain.com` | Identifier le client |
-| `EHLO` | `EHLO domain.com` | Version étendue de HELO |
-| `VRFY` | `VRFY username` | Vérifier si un utilisateur existe |
-| `EXPN` | `EXPN listname` | Développer une liste de diffusion |
-| `RCPT TO` | `RCPT TO:<user@domain>` | Spécifier le destinataire |
-| `MAIL FROM` | `MAIL FROM:<sender@domain>` | Spécifier l'expéditeur |
+> 🦠 Malware connus exploitant le port 53 : **ADM worm**, **Bonk Trojan**
 
 ```bash
-# Exemple d'énumération SMTP
-telnet mail.target.com 25
-EHLO test
-VRFY admin
-VRFY root
-EXPN administrators
+# Test zone transfer
+dig @<nameserver> <domain> axfr
+nslookup> set querytype=soa <domain>
 ```
 
 ---
 
-## 🗺️ Schéma Récapitulatif
+### 🔵 TCP/UDP 135 — RPC Endpoint Mapper
+- Permet aux clients RPC de trouver le port assigné à un service RPC spécifique
+- **Vulnérabilité** : mauvaise gestion des messages malformés → attaque **DoS**
+
+---
+
+### 🔵 UDP 137 — NetBIOS Name Service (NBNS / WINS)
+- Résolution de noms NetBIOS ↔ adresses IP
+- Aussi connu sous **Windows Internet Name Service (WINS)**
+- TCP 137 possible mais rare en pratique
+
+---
+
+### 🔵 TCP 139 — NetBIOS Session (SMB over NetBIOS)
+> 🔴 **Port prioritaire à restreindre sur les systèmes Windows**
+
+- Transfert de fichiers sur le réseau
+- Sessions null + partage fichiers/imprimantes
+- Accès non autorisé possible → vol de données
+
+---
+
+### 🔵 TCP/UDP 445 — SMB over TCP (Direct Host)
+- SMB directement sur TCP (sans NetBIOS)
+- Remplace progressivement le port 139
+- Supporte les versions modernes de SMB (SMBv2, SMBv3)
+
+---
+
+### 🔵 UDP 161/162 — SNMP
+```
+Manager  ──→ port 161 (requêtes)  ──→ Agent
+Manager  ←── port 162 (traps)     ←── Agent
+```
+- **Port 161** : réception des requêtes SNMP
+- **Port 162** : envoi des notifications (traps)
+
+---
+
+### 🔵 TCP/UDP 389 — LDAP
+- Accès aux annuaires distribués (Active Directory)
+- Permet l'énumération anonyme si mal configuré
+
+---
+
+### 🔵 TCP 2049 — NFS
+- Montage de systèmes de fichiers distants
+- Si mal configuré → contrôle du système, escalade de privilèges, backdoors
+
+---
+
+### 🔵 TCP 25 — SMTP
+
+| Commande | Syntaxe | Usage |
+|----------|---------|-------|
+| **Hello** | `HELO <host>` | Identification |
+| **From** | `MAIL FROM:<addr>` | Expéditeur |
+| **Recipient** | `RCPT TO:<addr>` | Destinataire |
+| **Verify** | `VRFY <string>` | ⚠️ Valide un user |
+| **Expand** | `EXPN <string>` | ⚠️ Liste les aliases |
+| **Data** | `DATA` | Corps du message |
+| **Quit** | `QUIT` | Fermeture |
+
+---
+
+### 🔵 TCP 22 — SSH / SFTP
+- SSH : alternative sécurisée à Telnet
+- SFTP : utilise **le même port 22** (plus simple que FTP/S)
+- **Attaque** : brute-force des credentials SSH
+
+---
+
+### 🔵 TCP 23 — Telnet
+> 🔴 **PROTOCOLE NON SÉCURISÉ** — Transmet les credentials **en clair**
+
+- Principalement utilisé sur réseaux privés
+- Vecteur : banner grabbing, brute-force, port-forwarding
+
+---
+
+### 🔵 UDP 69 — TFTP
+- Protocole **sans connexion** basé sur UDP
+- Pas de garantie de transmission
+- Utilisé pour mises à jour firmware
+- **Risque** : installation de malware/firmware malveillant
+
+---
+
+### 🔵 TCP 179 — BGP
+- Utilisé par les ISP pour les grandes tables de routage
+- **Mauvaise config** → dictionnary attacks, resource exhaustion, flooding, hijacking
+
+---
+
+### 🔵 TCP/UDP 500 — ISAKMP/IKE
+- Protocole d'établissement des associations de sécurité pour **IPsec/VPN**
+- Négociation, modification et suppression des SAs et clés cryptographiques
+
+---
+
+### 🔵 TCP/UDP 3268 — Global Catalog Service
+- Serveur Microsoft stockant les infos de **tout l'annuaire** (pas seulement un domaine)
+- LDAP sur le Global Catalog → port **3268**
+- Utilisé pour localiser des objets dans n'importe quel domaine
+
+---
+
+### 🔵 TCP/UDP 5060/5061 — SIP (VoIP)
+- 5060 : trafic **non chiffré**
+- 5061 : trafic **chiffré TLS**
+
+---
+
+## 🎯 Résumé mnémotechnique
 
 ```
- RÉSEAU CIBLE
-      │
-      ├── Port 53  ────────→ DNS → Cartographie des hôtes
-      ├── Port 135 ────────→ RPC → Services disponibles  
-      ├── Port 137 ────────→ NetBIOS → Noms de machines
-      ├── Port 139 ────────→ SMB → Partages & sessions
-      ├── Port 161 ────────→ SNMP → Config & topologie
-      ├── Port 389 ────────→ LDAP → Users & groupes AD
-      ├── Port 445 ────────→ SMB Direct → Fichiers
-      ├── Port 25  ────────→ SMTP → Comptes email
-      └── Port 2049────────→ NFS → Systèmes de fichiers
+"Super Sécurisé, Ne Pas Toucher Léger Négligemment Sans Big Surprise"
+  SSH(22) SMTP(25) NFS(2049) TFTP(69) LDAP(389) NetBIOS(137-139) SMB(445) BGP(179) SNMP(161)
 ```
 
 ---
 
-[← Introduction](./01-introduction-concepts.md) | [NetBIOS & SMB →](./03-netbios-smb.md)
+[← Introduction](./01-introduction.md) | [→ NetBIOS Enumeration](./03-netbios-enumeration.md)
