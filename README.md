@@ -54,9 +54,9 @@ Chaque module du programme CEH v13 dispose de son propre dossier, contenant plus
 | 01 | Introduction to Ethical Hacking | 🔜 En cours d'amélioration |
 | 02 | Footprinting & Reconnaissance | ✅ Disponible |
 | 03 | Scanning Networks | ✅ Disponible |
-| 04 | Enumeration | 🔜 À venir |
-| 05 | Vulnerability Analysis | 🔜 À venir |
-| 06 | System Hacking | 🔜 À venir |
+| 04 | Enumeration | ✅ Disponible  |
+| 05 | Vulnerability Analysis | ✅ Disponible  |
+| 06 | System Hacking | ✅ Disponible  |
 | ... | ... | ... |
 
 ---
