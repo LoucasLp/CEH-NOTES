@@ -51,17 +51,26 @@ Chaque module du programme CEH v13 dispose de son propre dossier, contenant plus
 
 | Module | Titre | Statut |
 |--------|-------|--------|
-| 01 | Introduction to Ethical Hacking | 🔜 En cours d'amélioration |
+| 01 | Introduction to Ethical Hacking | ✅ Disponible |
 | 02 | Footprinting & Reconnaissance | ✅ Disponible |
 | 03 | Scanning Networks | ✅ Disponible |
-| 04 | Enumeration | ✅ Disponible  |
-| 05 | Vulnerability Analysis | ✅ Disponible  |
-| 06 | System Hacking | ✅ Disponible  |
-| 07 | Malware threats | ✅ Disponible  |
-| 08 | Sniffing | ✅ Disponible  |
-| 09 | Social Engineering | ✅ Disponible  |
-| 10 | Denial-of-service | ✅ Disponible  |
-| ... | ... | ... |
+| 04 | Enumeration | ✅ Disponible |
+| 05 | Vulnerability Analysis | ✅ Disponible |
+| 06 | System Hacking | ✅ Disponible |
+| 07 | Malware Threats | ✅ Disponible |
+| 08 | Sniffing | ✅ Disponible |
+| 09 | Social Engineering | ✅ Disponible |
+| 10 | Denial-of-Service | ✅ Disponible |
+| 11 | Session Hijacking | 🟡 Ajouté (squelette) |
+| 12 | Evading IDS, Firewalls & Honeypots | 🟡 Ajouté (squelette) |
+| 13 | Hacking Web Servers | 🟡 Ajouté (squelette) |
+| 14 | Hacking Web Applications | 🟡 Ajouté (squelette) |
+| 15 | SQL Injection | 🟡 Ajouté (squelette) |
+| 16 | Hacking Wireless Networks | 🟡 Ajouté (squelette) |
+| 17 | Hacking Mobile Platforms | 🟡 Ajouté (squelette) |
+| 18 | IoT & OT Hacking | 🟡 Ajouté (squelette) |
+| 19 | Cloud Computing | 🟡 Ajouté (squelette) |
+| 20 | Cryptography | 🟡 Ajouté (squelette) |
 
 ---
 

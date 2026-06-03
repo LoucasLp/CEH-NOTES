@@ -103,3 +103,7 @@
 | **MITRE ATT&CK** | Base de données de TTPs réelles d'adversaires (voir Partie 3) |
 | **Cyber Kill Chain** | Modèle Lockheed Martin des étapes d'une cyberattaque (voir Partie 3) |
 | **Diamond Model** | Modèle d'analyse d'intrusion en 4 composants (voir Partie 3) |
+
+---
+
+*⬅️ [InfoSec & Types Hackers](./01_infosec_types_hackers.md) | ➡️ [Kill Chain & MITRE ATT&CK](./03_killchain_mitre_ioc.md)*

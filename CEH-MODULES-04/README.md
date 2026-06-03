@@ -1,108 +1,78 @@
-# 📚 CEH v13 — Module 4 : Énumération (Enumeration)
+# 📚 CEH v13 — Module 04 : Énumération (Enumeration)
 
-> **Certified Ethical Hacker v13** | Notes de cours complètes  
-> 📅 Dernière mise à jour : Mars 2026
+> **Certified Ethical Hacker v13 — AI Powered**  
+> EC-Council | Formation officielle
 
 ---
 
-## 🗂️ Table des matières
+## 🗂️ Structure des notes
 
-| # | Fichier | Contenu |
-|---|---------|---------|
-| 01 | [Introduction & Techniques](./01-introduction.md) | Définition, objectifs, techniques d'énumération |
-| 02 | [Ports & Services](./02-ports-services.md) | TCP/UDP, protocoles et ports clés |
-| 03 | [NetBIOS Enumeration](./03-netbios-enumeration.md) | NetBIOS, Nbtstat, outils |
-| 04 | [SNMP Enumeration](./04-snmp-enumeration.md) | SNMP, MIB, SnmpWalk, outils |
-| 05 | [LDAP Enumeration](./05-ldap-enumeration.md) | LDAP, AD, ldapsearch, outils |
-| 06 | [NTP & NFS Enumeration](./06-ntp-nfs-enumeration.md) | NTP commands, NFS, RPCScan |
-| 07 | [SMTP & DNS Enumeration](./07-smtp-dns-enumeration.md) | SMTP, DNS zone transfer, cache snooping, DNSSEC |
-| 08 | [IPsec, VoIP, RPC, Linux](./08-other-enumeration.md) | IPsec/IKE, VoIP/SIP, RPC, Unix/Linux, SMB |
-| 09 | [Countermeasures](./09-countermeasures.md) | Contre-mesures par protocole |
+| Fichier | Contenu |
+|--------|---------|
+| [`01-introduction.md`](./01-introduction.md) | Définition, objectifs, techniques d'énumération, différence scanning/enum |
+| [`02-ports-services.md`](./02-ports-services.md) | TCP/UDP, protocoles et ports clés à connaître |
+| [`03-netbios-enumeration.md`](./03-netbios-enumeration.md) | NetBIOS, Nbtstat, enum4linux, outils |
+| [`04-snmp-enumeration.md`](./04-snmp-enumeration.md) | SNMP, MIB, community strings, snmpwalk, outils |
+| [`05-ldap-enumeration.md`](./05-ldap-enumeration.md) | LDAP, Active Directory, ldapsearch, outils |
+| [`06-ntp-nfs-enumeration.md`](./06-ntp-nfs-enumeration.md) | NTP commands, NFS, RPCScan |
+| [`07-smtp-dns-enumeration.md`](./07-smtp-dns-enumeration.md) | SMTP user enum, DNS zone transfer, DNSSEC, cache snooping |
+| [`08-other-enumeration.md`](./08-other-enumeration.md) | IPsec/IKE, VoIP/SIP, RPC, SMB, Unix/Linux enum |
+| [`09-countermeasures.md`](./09-countermeasures.md) | Contre-mesures par protocole (NetBIOS, SNMP, LDAP, DNS...) |
+| [`10-Quiz-et-Revision.md`](./10-Quiz-et-Revision.md) | Questions, rappels et exercices rapides |
 
 ---
 
 ## 🎯 Objectifs du module
 
-À la fin de ce module, vous serez capable de :
+À l'issue de ce module, vous serez capable de :
 
-- ✅ Définir l'énumération et ses techniques
+- ✅ Définir l'énumération et la différencier du scanning
 - ✅ Identifier les services et ports vulnérables à l'énumération
-- ✅ Utiliser les outils d'énumération (Nmap, Nbtstat, SnmpWalk, ldapsearch…)
-- ✅ Effectuer une énumération NetBIOS, SNMP, LDAP, NTP, NFS, SMTP, DNS
-- ✅ Appliquer les contre-mesures appropriées
+- ✅ Effectuer une énumération NetBIOS, SNMP, LDAP, NTP, SMTP, DNS
+- ✅ Utiliser les outils : Nbtstat, snmpwalk, ldapsearch, enum4linux, dig
+- ✅ Réaliser un transfert de zone DNS (zone transfer)
+- ✅ Appliquer les contre-mesures appropriées par protocole
 
 ---
 
-## 🔑 Concepts clés à retenir
+## 📊 Poids dans l'examen CEH (312-50)
 
 ```
-Énumération = Connexions ACTIVES avec la cible (≠ scanning passif)
-```
-
-| Concept | Définition rapide |
-|---------|------------------|
-| **Enumeration** | Extraction active d'infos : users, shares, services, routing tables |
-| **NetBIOS** | Protocole Windows de partage de fichiers/imprimantes (ports 137-139) |
-| **SNMP** | Gestion réseau à distance — community strings = mots de passe |
-| **LDAP** | Accès aux annuaires (Active Directory) — port 389 |
-| **DNS Zone Transfer** | Copie complète de la base DNS — vecteur d'attaque majeur |
-| **MIB** | Base de données virtuelle des objets gérés par SNMP |
-
----
-
-## ⚡ Commandes rapides (Cheat Sheet)
-
-```bash
-# NetBIOS
-nbtstat -a <IP>                          # Name table distante
-nmap -sV --script nbstat.nse <IP>        # NetBIOS via Nmap
-
-# SNMP
-snmpwalk -v2c -c public <IP>             # Enumération SNMP
-nmap -sU -p 161 --script=snmp-processes <IP>
-
-# LDAP
-ldapsearch -h <IP> -x -b "DC=domain,DC=local"
-nmap -p 389 --script ldap-brute <IP>
-
-# DNS Zone Transfer
-dig ns <domain>
-dig @<nameserver> <domain> axfr
-dnsrecon -t axfr -d <domain>
-
-# SMTP
-nmap -p 25 --script=smtp-enum-users <IP>
-smtp-user-enum.pl -M VRFY -U users.txt -t <IP>
-
-# SMB
-nmap -p 445 -A <IP>
-nmap -p 445 --script smb-protocols <IP>
+Module 04 — Enumeration
+Poids estimé : ~3-5% des questions de l'examen
+Nb de labs officiels : ~6 labs dans la plateforme iLabs/CyberQ
+Thèmes récurrents : SNMP community strings, NetBIOS Nbtstat,
+                    DNS zone transfer (AXFR), LDAP ldapsearch,
+                    ports à connaître (137/139/161/389/445)
 ```
 
 ---
 
-## 📊 Vue d'ensemble des ports
+## 🔗 Ressources complémentaires
 
-| Port | Protocole | Service |
-|------|-----------|---------|
-| 21/22 | TCP | FTP / SSH-SFTP |
-| 23 | TCP | Telnet |
-| 25 | TCP | SMTP |
-| 53 | TCP/UDP | DNS |
-| 69 | UDP | TFTP |
-| 123 | UDP | NTP |
-| 135 | TCP/UDP | RPC Endpoint Mapper |
-| 137 | UDP | NetBIOS Name Service |
-| 139 | TCP | NetBIOS Session (SMB) |
-| 161/162 | UDP | SNMP / SNMP Trap |
-| 179 | TCP | BGP |
-| 389 | TCP/UDP | LDAP |
-| 445 | TCP/UDP | SMB Direct |
-| 500 | UDP | IKE/ISAKMP |
-| 2049 | TCP | NFS |
-| 3268 | TCP/UDP | Global Catalog |
-| 5060/5061 | TCP/UDP | SIP (VoIP) |
+- [EC-Council Official CEHv13](https://www.eccouncil.org/train-certify/certified-ethical-hacker-ceh/)
+- [CyberQ Platform (Labs)](https://cyberq.eccouncil.org)
+- [Nmap NSE Scripts](https://nmap.org/nsedoc/)
+- [dnsrecon (GitHub)](https://github.com/darkoperator/dnsrecon)
+- [enum4linux-ng (GitHub)](https://github.com/cddmp/enum4linux-ng)
 
 ---
 
-> 💡 **Rappel éthique** : L'énumération sans autorisation est **illégale**. Toujours obtenir une autorisation écrite avant tout test de pénétration.
+## 🧠 Mémo rapide — Ports clés à l'énumération
+
+```
+NetBIOS   : 137/UDP (Name), 138/UDP (Datagram), 139/TCP (Session)
+SMB       : 445/TCP (Direct)
+SNMP      : 161/UDP (queries), 162/UDP (traps)
+LDAP      : 389/TCP, 3268/TCP (Global Catalog)
+SMTP      : 25/TCP
+DNS       : 53/TCP/UDP
+NTP       : 123/UDP
+NFS/RPC   : 2049/TCP, 111/TCP
+SIP/VoIP  : 5060/UDP, 5061/TCP
+```
+
+---
+
+*Notes rédigées dans le cadre de la préparation à la certification CEH v13 — EC-Council*  
+*Format : Markdown — Compatible GitHub Pages*

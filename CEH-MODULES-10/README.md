@@ -14,6 +14,7 @@
 | [`03_techniques_avancees.md`](./03_techniques_avancees.md) | Botnets, Amplification, Attaques avancées |
 | [`04_outils_et_labs.md`](./04_outils_et_labs.md) | Outils offensifs & labs CEHv13 |
 | [`05_contre-mesures.md`](./05_contre-mesures.md) | Détection, mitigation, défense |
+| [`06_quiz_et_revision.md`](./06_quiz_et_revision.md) | Questions, cas et rappels d'examen |
 
 ---
 
