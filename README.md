@@ -57,6 +57,10 @@ Chaque module du programme CEH v13 dispose de son propre dossier, contenant plus
 | 04 | Enumeration | ✅ Disponible  |
 | 05 | Vulnerability Analysis | ✅ Disponible  |
 | 06 | System Hacking | ✅ Disponible  |
+| 07 | Malware threats | ✅ Disponible  |
+| 08 | Sniffing | ✅ Disponible  |
+| 09 | Social Engineering | ✅ Disponible  |
+| 10 | Denial-of-service | ✅ Disponible  |
 | ... | ... | ... |
 
 ---
