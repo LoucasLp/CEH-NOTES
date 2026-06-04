@@ -5,6 +5,15 @@
 
 ---
 
+## 📌 Table des matières
+
+1. [Architecture IoT](#1-architecture-iot)
+2. [OT/SCADA/ICS — Définitions](#2-otscadaics--définitions)
+3. [Protocoles Industriels Importants](#3-protocoles-industriels-importants)
+4. [Différences IT vs OT](#4-différences-it-vs-ot)
+
+---
+
 ## 1. Architecture IoT
 
 ```
@@ -31,6 +40,8 @@ Couche 3 — APPLICATION (traitement, cloud) :
 | **Zigbee** | 2.4 GHz | Domotique (Z-Wave aussi) | Chiffrement AES |
 | **LoRaWAN** | RF | IoT longue portée | AES-128 |
 
+> 💡 **Question type exam** : *Quel port MQTT est chiffré ?* → **8883 (TLS)** ; le port 1883 est non chiffré.
+
 ---
 
 ## 2. OT/SCADA/ICS — Définitions
@@ -39,26 +50,26 @@ Couche 3 — APPLICATION (traitement, cloud) :
 OT (Operational Technology) :
   → Hardware/software qui contrôle les équipements physiques
   → Usines, centrales électriques, stations de traitement d'eau
-  
+
 ICS (Industrial Control System) :
   → Famille de systèmes de contrôle industriels
   → Comprend SCADA, DCS, PLC
-  
+
 SCADA (Supervisory Control and Data Acquisition) :
   → Supervision et contrôle à distance
   → Interface homme-machine (HMI)
   → Collecte de données (historique)
-  
+
 DCS (Distributed Control System) :
   → Contrôle distribué dans une installation (raffinerie, centrale)
-  
+
 PLC (Programmable Logic Controller) :
   → Automate programmable, contrôle les processus physiques
   → Ex: ouvrir/fermer une valve, démarrer un moteur
-  
+
 RTU (Remote Terminal Unit) :
   → Collecte données terrain, envoie au SCADA
-  
+
 HMI (Human-Machine Interface) :
   → Interface graphique de supervision pour les opérateurs
 ```
@@ -81,14 +92,17 @@ HMI (Human-Machine Interface) :
 
 ## 3. Protocoles Industriels Importants
 
-| Protocole | Usage | Sécurité |
-|-----------|-------|---------|
-| **Modbus** | Protocole série/TCP industriel, très répandu | Pas d'authentification, pas de chiffrement ! |
-| **DNP3** | SCADA, utilities (eau, électricité) | Version sécurisée disponible mais rare |
-| **IEC 61850** | Sous-stations électriques | Chiffrement possible |
-| **BACnet** | Bâtiments intelligents (HVAC) | Authentification optionnelle |
-| **PROFIBUS** | Automatisation industrielle | Limité |
-| **EtherNet/IP** | Réseaux industriels Allen-Bradley | Peu sécurisé par défaut |
+| Protocole | Port | Usage | Sécurité |
+|-----------|------|-------|---------|
+| **Modbus** | TCP/502 | Protocole série/TCP industriel, très répandu | Pas d'authentification, pas de chiffrement ! |
+| **DNP3** | 20000 | SCADA, utilities (eau, électricité) | Version sécurisée disponible mais rare |
+| **IEC 61850** | — | Sous-stations électriques | Chiffrement possible |
+| **BACnet** | 47808 UDP | Bâtiments intelligents (HVAC) | Authentification optionnelle |
+| **PROFIBUS** | — | Automatisation industrielle | Limité |
+| **EtherNet/IP** | 44818 | Réseaux industriels Allen-Bradley | Peu sécurisé par défaut |
+| **S7comm** | 102 | PLCs Siemens (cible de Stuxnet) | Authentification optionnelle |
+
+> ⚠️ **Rappel CEH** : **Modbus** = aucune authentification, aucun chiffrement. Quiconque accède au réseau OT peut envoyer des commandes directes aux PLCs.
 
 ---
 
@@ -96,12 +110,13 @@ HMI (Human-Machine Interface) :
 
 | Critère | IT (Informatique) | OT (Industriel) |
 |---------|------------------|-----------------|
-| **Priorité** | CIA (Confidentialité) | **Disponibilité** avant tout |
+| **Priorité** | CIA (Confidentialité d'abord) | **Disponibilité** avant tout |
 | **Cycle de vie** | 3-5 ans | **20-40 ans** |
-| **Patchage** | Régulier | Rare (arrêts de production) |
-| **Tolérance panne** | Quelques heures | Quasi-zéro (systèmes critiques) |
-| **OS** | Windows 10+, Linux récent | Windows XP non patché courant ! |
-| **Tests sécu** | Tests réguliers OK | Peut endommager l'équipement physique ! |
+| **Patchage** | Régulier, automatisé | Rare (arrêts de production planifiés) |
+| **Tolérance panne** | Quelques heures tolérables | Quasi-zéro (systèmes critiques) |
+| **OS courants** | Windows 10+, Linux récent | Windows XP non patché encore courant ! |
+| **Tests de sécu** | Tests réguliers acceptables | Peut endommager l'équipement physique ! |
+| **Redémarrage** | Simple et rapide | Peut prendre des heures (redémarrage four aciérie) |
 
 > ⚠️ **Rappel CEH** : En OT, la **disponibilité** est la priorité absolue, avant la confidentialité. Un arrêt d'une centrale électrique = catastrophe. Impossible de redémarrer un PLC pendant les tests !
 
@@ -109,12 +124,14 @@ HMI (Human-Machine Interface) :
 
 ## 🧠 Points clés à retenir pour l'examen
 
-- **SCADA** = supervision/contrôle à distance
-- **PLC** = automate programmable (contrôle physique)
-- **Modbus** = protocole industriel sans authentification ni chiffrement
-- **MQTT** = protocole IoT pub/sub, port 1883 (non chiffré) / 8883 (TLS)
+- **SCADA** = supervision/contrôle à distance (Supervisory Control and Data Acquisition)
+- **PLC** = automate programmable (contrôle les processus physiques)
+- **HMI** = interface graphique opérateur (Human-Machine Interface)
+- **Modbus port 502** = protocole industriel sans authentification ni chiffrement
+- **MQTT port 1883** = non chiffré ; **port 8883** = TLS (chiffré)
+- **S7comm port 102** = protocole PLCs Siemens (cible de Stuxnet)
 - OT priorité = **Disponibilité > Intégrité > Confidentialité** (inversé vs IT)
-- Air gap = séparation physique du réseau OT d'Internet (mythe souvent)
+- Air gap = séparation physique du réseau OT d'Internet (souvent un mythe — Stuxnet clé USB !)
 
 ---
 

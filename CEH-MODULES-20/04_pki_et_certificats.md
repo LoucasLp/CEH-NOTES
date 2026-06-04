@@ -5,6 +5,17 @@
 
 ---
 
+## 📌 Table des matières
+
+1. [Infrastructure PKI](#1-infrastructure-pki)
+2. [Certificat X.509](#2-certificat-x509)
+3. [Processus de Demande (CSR)](#3-processus-de-demande-csr)
+4. [Révocation : CRL et OCSP](#4-révocation--crl-et-ocsp)
+5. [TLS Handshake](#5-tls-handshake)
+6. [Certificate Transparency](#6-certificate-transparency)
+
+---
+
 ## 1. Infrastructure PKI
 
 ```

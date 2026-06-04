@@ -5,6 +5,14 @@
 
 ---
 
+## 📌 Table des matières
+
+1. [Algorithmes Symétriques](#1-algorithmes-symétriques)
+2. [Algorithmes Asymétriques](#2-algorithmes-asymétriques)
+3. [Fonctions de Hachage](#3-fonctions-de-hachage)
+
+---
+
 ## 1. Algorithmes Symétriques
 
 | Algorithme | Taille clé | Taille bloc | Statut |

@@ -5,6 +5,16 @@
 
 ---
 
+## 📌 Table des matières
+
+1. [Algorithmes Recommandés (2024)](#1-algorithmes-recommandés-2024)
+2. [Configuration TLS Sécurisée](#2-configuration-tls-sécurisée)
+3. [Gestion des Clés](#3-gestion-des-clés)
+4. [HSTS et Headers TLS](#4-hsts-et-headers-tls)
+5. [Post-Quantum Cryptography](#5-post-quantum-cryptography)
+
+---
+
 ## 1. Algorithmes Recommandés (2024)
 
 ```
@@ -158,5 +168,18 @@ Migration :
 | Stocker des clés | HSM / AWS KMS |
 
 ---
+
+
+## 🧠 Points clés à retenir pour l'examen
+
+- **AES-256-GCM** = standard actuel recommandé (chiffrement + authentification)
+- **TLS 1.3** = version TLS recommandée (TLS 1.0/1.1 dépréciés, SSLv3 cassé)
+- **ECB** = mode dangereux (patterns visibles dans le ciphertext)
+- **Argon2id** = algorithme recommandé pour le stockage des mots de passe (2024)
+- **"Don't roll your own crypto"** = ne jamais implémenter sa propre cryptographie
+- **HSM** = Hardware Security Module (les clés ne quittent jamais le matériel)
+- **HSTS** = force HTTPS via header HTTP, protège contre SSL Stripping
+- **CRYSTALS-Kyber/Dilithium** = algorithmes post-quantiques standardisés NIST 2024
+- **DHE/ECDHE** = algorithmes avec **Perfect Forward Secrecy** (PFS)
 
 *⬅️ [PKI et Certificats](./04_pki_et_certificats.md) | ➡️ [Quiz et Révision](./06_quiz_et_revision.md)*
